@@ -1,0 +1,40 @@
+{
+  "expo": {
+    "name": "Travel Explorer",
+    "slug": "travel-explorer",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#0E2A55",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      }
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "backgroundColor": "#030A1C",
+    "plugins": [
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#030A1C",
+          "image": "./assets/splash-icon.png",
+          "imageWidth": 160,
+          "dark": {
+            "backgroundColor": "#030A1C",
+            "image": "./assets/splash-icon.png"
+          }
+        }
+      ],
+      "expo-font"
+    ]
+  }
+}

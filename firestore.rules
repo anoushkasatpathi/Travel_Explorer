@@ -1,0 +1,82 @@
+rules_version = '2';
+
+// Travel Explorer – Firestore security rules
+// Publish in the Firebase console: Firestore Database → Rules → paste → Publish
+// (or with the CLI: firebase deploy --only firestore:rules)
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(uid) {
+      return signedIn() && request.auth.uid == uid;
+    }
+
+    // ---------- Private per-user data ----------
+    // users/{uid}                 profile (displayName, email, migratedAt…)
+    // users/{uid}/data/wishlist   { ids: [...], updatedAt }
+    // users/{uid}/data/tripPlans  { plans: {...}, updatedAt }
+    // Only the user can read or write their own documents.
+    match /users/{uid} {
+      allow read, write: if isOwner(uid);
+
+      match /{document=**} {
+        allow read, write: if isOwner(uid);
+      }
+    }
+
+    // ---------- Buddy Finder posts ----------
+    // Everyone can read. Only the owner can create, edit or delete.
+    // Any signed-in user (including guests) may add/remove ONLY their own uid
+    // in the `interested` array ("I'm in!").
+    match /buddyPosts/{postId} {
+      allow read: if true;
+
+      function validPost(d) {
+        return d.ownerId is string
+          && d.name is string && d.name.size() > 0 && d.name.size() <= 30
+          && d.destinationId is string && d.destinationId.size() <= 40
+          && d.startDate is string
+          && d.days is int && d.days >= 1 && d.days <= 30
+          && d.travelType in ['solo', 'group']
+          && d.groupSize is int && d.groupSize >= 1 && d.groupSize <= 20
+          && d.spots is int && d.spots >= 1 && d.spots <= 12
+          && d.styles is list && d.styles.size() <= 4
+          && d.budget is number && d.budget >= 0
+          && d.message is string && d.message.size() <= 280
+          && d.interested is list;
+      }
+
+      allow create: if signedIn()
+        && request.resource.data.ownerId == request.auth.uid
+        && request.resource.data.interested.size() == 0
+        && validPost(request.resource.data);
+
+      // Owner edits: can change anything except who owns it
+      allow update: if isOwner(resource.data.ownerId)
+        && request.resource.data.ownerId == resource.data.ownerId
+        && validPost(request.resource.data);
+
+      // Others: toggle only their own uid in `interested`
+      allow update: if signedIn()
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['interested'])
+        && (
+          (request.resource.data.interested.toSet().difference(resource.data.interested.toSet()) == [request.auth.uid].toSet()
+            && resource.data.interested.toSet().difference(request.resource.data.interested.toSet()).size() == 0)
+          ||
+          (resource.data.interested.toSet().difference(request.resource.data.interested.toSet()) == [request.auth.uid].toSet()
+            && request.resource.data.interested.toSet().difference(resource.data.interested.toSet()).size() == 0)
+        );
+
+      allow delete: if isOwner(resource.data.ownerId);
+    }
+
+    // Everything else is closed
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
