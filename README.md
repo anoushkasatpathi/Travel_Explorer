@@ -149,7 +149,7 @@ npx expo start -c
 
 Everything works without Firebase (local-only mode). To turn on accounts, the shared Buddy feed and cloud sync:
 
-1. **Create a project.** Go to [console.firebase.google.com](https://console.firebase.google.com) → **Add project** → give it a name (e.g. `travel-explorer`). Google Analytics is optional.
+1. **Create a project.** Go to [console.firebase.google.com](https://console.firebase.google.com) → **Add project** → give it a name (e.g. `Travel_Explorer`). Google Analytics is optional.
 2. **Register a web app.** On the project overview, click the **Web** icon (`</>`), give it a nickname and click **Register app** (Hosting isn't needed). Firebase shows a `firebaseConfig` object; keep that page open.
 3. **Enable Authentication.** Go to **Build → Authentication → Get started → Sign-in method** and enable:
    - **Email/Password**
@@ -179,7 +179,7 @@ EXPO_PUBLIC_FIREBASE_APP_ID=1:1234567890:web:abc123
 
 ```bash
 git clone https://github.com/anoushkasatpathi/Travel_Explorer.git
-cd travel-explorer
+cd Travel_Explorer
 npm install
 npx expo start
 ```
@@ -193,7 +193,7 @@ To run in a browser, use `npx expo start --web`.
 ## Project structure
 
 ```
-travel-explorer/
+Travel-Explorer/
 ├── App.js                      # Root: wraps the app in providers + navigator
 ├── src/
 │   ├── data/destinations.js    # Static destination data + search/filter function
