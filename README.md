@@ -3,8 +3,6 @@
 A React Native (Expo) app for discovering destinations across India and saving favourites for future trips.
 Built for the **GDGC VNRVJIET App Development volunteer recruitment assignment**.
 
-> Author: Suryatej Bandla ([@surya-txj](https://github.com/surya-txj))
-
 ### What's new in v2
 - **Firebase (Auth + Firestore):** real email/password sign-in with guest fallback. The Buddy Finder is a realtime shared feed, and the wishlist and trip planner sync per user (with an offline cache). Local data is migrated on first sign-in. Security rules are in `firestore.rules`.
 - **ExchangeRate-API key:** uses the authenticated v6 endpoint, with backup sources and a small "Using backup rates" note when needed.
@@ -180,7 +178,7 @@ EXPO_PUBLIC_FIREBASE_APP_ID=1:1234567890:web:abc123
 ### Run it
 
 ```bash
-git clone https://github.com/surya-txj/travel-explorer.git
+git clone https://github.com/anoushkasatpathi/Travel_Explorer.git
 cd travel-explorer
 npm install
 npx expo start
